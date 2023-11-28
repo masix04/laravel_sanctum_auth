@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Http\Controllers\Api\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+use App\Repositories\AuthRepository;
+
+class AuthController extends Controller
+{
+    protected $appUser;
+
+    public function __construct(AuthRepository $auth)
+    {
+        $this->appUser = $auth;
+    }
+ 
+    public function register(Request $request)
+    {
+        // Validation
+        $validator = Validator::make(
+            $request->all(), 
+            [
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'dob' => 'required',
+                'password' => 'required|string|min:8',
+            ]
+        );
+
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'message' => $validator->errors()->all()
+            ];
+            return response()->json($response, 400);
+        }
+
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        // $input['password'] = Hash::make($input['password']);
+        $user = User::create($input);
+
+        $success['token'] = $user->createToken('Api Token - S')->plainTextToken;
+        // $success['token'] = $user->createToken('laravel')->accessToken;
+        $success['name'] = $user->name;
+
+        $response = [
+            'success' => true,
+            'data' => $success,
+            'message' => 'User register successfully'
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function login(Request $request)
+    {
+        
+        if (Auth::attempt(['email' =>  $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+
+            $success['token'] = $user->createToken('Api Token - L')->plainTextToken;
+            $success['name'] = $user->name;
+
+            $response = [
+                'success' => true,
+                'data' => $success,
+                'message' => 'User login successfully'
+            ];
+            return response()->json($response, 200);
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Authorization Failed! Please make sure to add correct credentionals!'
+            ];
+            return response()->json($response);
+        }
+
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->user()->tokens();
+        $token->delete();
+
+        $response = ['message' => 'You have been successfully logged out!'];
+        
+        return response()->json($response, 200);
+    }
+}
