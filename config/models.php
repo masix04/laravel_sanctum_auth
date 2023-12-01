@@ -283,7 +283,6 @@ return [
             'migrations',
             'failed_jobs',
             'password_resets',
-            'personal_access_tokens',
             'password_reset_tokens',
         ],
 

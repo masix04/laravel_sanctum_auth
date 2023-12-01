@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 
+use Carbon\Carbon;
+
 class AuthRepository
 {
     public function saveUser(Request $request)
     {
-        $user = $this->checkUserVerified($request);
+        $user = $this->checkUserExistance($request);
         if (!$user) {
             User::create([
                 'email' => $request->email,
@@ -23,19 +25,19 @@ class AuthRepository
         }
         return $user;
     }
- 
+
     public function makeUserVerified(Request $request)
     {
-        $user = $this->checkUserVerified($request);
+        $user = $this->checkUserExistance($request);
 
-        $user->email_verified_at = now();
-        // $user->status = 'ACTIVE';
+        $user->email_verified_at = Carbon::now('utc');
         $user->save();
+
         return $user;
     }
- 
+
     public function checkUserExistance($request)
     {
-        User::where('email', $request->email)->select('id', 'name', 'email', 'dob')->first();
+        return User::where('email', $request->email)->select('id', 'name', 'email', 'dob')->first();
     }
 }
