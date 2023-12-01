@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "70ec3265-bd59-46f0-8f3a-a613bf4e0723",
+		"name": "Laravel_Sanctum_Auth_APIs\\",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16585409"
+	},
+	"item": [
+		{
+			"name": "SignUp without Verification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Device-Type",
+						"value": "Postman-App",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8011/api/user/signup?name=laravel_sanctum-user1&email=lsuser1@gmail.com&password=lsuser01&dob=1201-11-11&fcm_token=ls-example-token-1",
+					"host": [
+						"localhost"
+					],
+					"port": "8011",
+					"path": [
+						"api",
+						"user",
+						"signup"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "laravel_sanctum-user1"
+						},
+						{
+							"key": "email",
+							"value": "lsuser1@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "lsuser01"
+						},
+						{
+							"key": "dob",
+							"value": "1201-11-11"
+						},
+						{
+							"key": "fcm_token",
+							"value": "ls-example-token-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LogIn with Verification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Device-Type",
+						"value": "Postman-WebApp",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8011/api/user/login?email=lsuser1@gmail.com&password=lsuser01&token=ls-example-token-1",
+					"host": [
+						"localhost"
+					],
+					"port": "8011",
+					"path": [
+						"api",
+						"user",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "lsuser1@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "lsuser01"
+						},
+						{
+							"key": "token",
+							"value": "ls-example-token-1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LogOut",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "16|ZvrMu503fnHwEYhYkVXjX3ZvakLhYnG75zy3mEgI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 2632b9deee2f667e8c1c550026fc59550e686c7a853ebff31e283e4d0119529b",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8011/api/user/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "8011",
+					"path": [
+						"api",
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
